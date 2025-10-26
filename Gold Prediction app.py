@@ -72,16 +72,17 @@ def train_model(df_lagged, feature_cols, train_ratio, n_estimators, random_state
     model = RandomForestRegressor(n_estimators=n_estimators, random_state=random_state)
     model.fit(X_train, y_train)
 
-preds = model.predict(X_test) if len(X_test) > 0 else np.array([])
-metrics = {}
-if len(X_test) > 0:
-    # Compute RMSE without relying on the 'squared' kwarg (older sklearn compat)
-    mae = mean_absolute_error(y_test, preds)
-    mse = mean_squared_error(y_test, preds)
-    rmse = float(np.sqrt(mse))
-    r2 = r2_score(y_test, preds)
-    metrics = {"MAE": float(mae), "RMSE": rmse, "R2": float(r2)}
-return model, metrics, split
+    preds = model.predict(X_test) if len(X_test) > 0 else np.array([])
+    metrics = {}
+    if len(X_test) > 0:
+        # Compute RMSE without using 'squared=False' for compatibility
+        mae = mean_absolute_error(y_test, preds)
+        mse = mean_squared_error(y_test, preds)
+        rmse = float(np.sqrt(mse))
+        r2 = r2_score(y_test, preds)
+        metrics = {"MAE": float(mae), "RMSE": rmse, "R2": float(r2)}
+
+    return model, metrics, split
 
 def recursive_forecast(last_values, model, horizon):
     """
