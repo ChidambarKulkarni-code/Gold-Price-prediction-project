@@ -81,7 +81,7 @@ if len(X_test) > 0:
     rmse = float(np.sqrt(mse))
     r2 = r2_score(y_test, preds)
     metrics = {"MAE": float(mae), "RMSE": rmse, "R2": float(r2)}
-return model, metrics, split
+    return model, metrics, split
 
 def recursive_forecast(last_values, model, horizon):
     """
