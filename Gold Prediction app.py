@@ -14,30 +14,31 @@ st.title("🏆 Gold Price Forecasting (Indian Market)")
 
 st.markdown("""
 This app predicts **Indian Gold Prices (INR)** using a preloaded dataset.  
-Simply select any date — past or future — to get an estimated gold price prediction.
+Just select any date — past or future — to get the estimated gold price prediction.
 """)
 
 # -------------------- LOAD FIXED DATASET --------------------
-DATA_PATH = "gold_price_predictions_final.csv"
+DATA_PATH = "gold_price_predictions_final.csv"  # ✅ Keep this file in the same folder as app.py
 
 @st.cache_data
 def load_data():
-    # Load the CSV
+    # Load CSV
     df = pd.read_csv(DATA_PATH)
     df.columns = [c.strip() for c in df.columns]
 
-    # ✅ Adjust column names as per your file
-    # Based on inspection of your uploaded CSV
-    # Assume columns: Date, Gold_Price (INR)
+    # ✅ Fixed column names from your file
     date_col = "Date"
-    target_col = "Gold_Price"  # <-- change this only if your file has a different name
+    target_col = "Actual_Price_INR"
 
+    # Parse dates
     df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+
+    # Clean and sort
     df = df[[date_col, target_col]].dropna().copy()
     df = df.sort_values(by=date_col)
     df.rename(columns={date_col: "Date", target_col: "GoldPrice"}, inplace=True)
 
-    # Add time features
+    # Add time and seasonality features
     df["t"] = (df["Date"] - df["Date"].min()).dt.days
     df["month"] = df["Date"].dt.month
     df["month_sin"] = np.sin(2 * np.pi * df["month"] / 12)
@@ -64,7 +65,7 @@ y_train = train_df["GoldPrice"]
 X_test = test_df[["t", "month_sin", "month_cos"]]
 y_test = test_df["GoldPrice"]
 
-# Build regression model with polynomial time trend
+# Polynomial + Ridge Regression
 degree = 2
 alpha = 1.0
 poly = PolynomialFeatures(degree=degree, include_bias=False)
@@ -101,11 +102,11 @@ ax.legend(); ax.grid(True, alpha=0.3)
 st.pyplot(fig)
 
 # -------------------- DATE INPUT FOR PREDICTION --------------------
-st.subheader("🗓️ Predict Gold Price for a Selected Date")
+st.subheader("🗓️ Predict Gold Price for a Given Date")
 
 min_date = df["Date"].min().date()
 max_date = df["Date"].max().date()
-st.caption(f"Training window: {min_date} → {max_date} (you can pick any date)")
+st.caption(f"Training window: {min_date} → {max_date}. You can pick any past or future date.")
 
 user_date = st.date_input("Select a date for prediction", value=max_date)
 
@@ -122,7 +123,7 @@ input_features = pd.DataFrame({
 predicted_price = float(model.predict(input_features)[0])
 st.success(f"💰 Predicted Gold Price for {user_date}: ₹{predicted_price:,.2f}")
 
-# -------------------- OPTIONAL: FORECAST LINE --------------------
+# -------------------- OPTIONAL: FORECAST TREND --------------------
 with st.expander("📉 View Forecast Trend for Next 6 Months"):
     future_days = 180
     future_dates = pd.date_range(df["Date"].max(), periods=future_days)
@@ -143,4 +144,4 @@ with st.expander("📉 View Forecast Trend for Next 6 Months"):
     st.pyplot(fig)
 
 st.markdown("---")
-st.markdown("🧠 *Model trained on Indian gold price trends using polynomial regression and seasonal patterns.*")
+st.markdown("🧠 *Model trained on Indian gold price trends using polynomial regression and seasonality patterns.*")
