@@ -166,12 +166,12 @@ def predict_at_date(model, feature_cols, history_df: pd.DataFrame, target_date: 
 try:
     raw_df = load_data(CSV_PATH)
 except Exception as e:
-    st.error(f"Failed to load the fixed CSV `{CSV_PATH}`.")
+    st.error(f"Failed to load the CSV `{CSV_PATH}`.")
     with st.expander("Show technical details"):
         st.exception(e)
     st.stop()
 
-st.success(f"Loaded {len(raw_df):,} rows from the fixed CSV.")
+st.success(f"Loaded {len(raw_df):,} rows from the CSV.")
 with st.expander("Peek at data (tail)"):
     st.dataframe(raw_df.tail(20), use_container_width=True)
 
