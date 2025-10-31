@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 from pathlib import Path
 
-st.set_page_config(page_title="Gold Price Viewer", layout="wide")
+st.set_page_config(page_title="Gold Price Predictor", layout="wide")
 st.title("🪙 Gold Price Viewer")
 
 
@@ -63,7 +63,7 @@ filtered = df[df["Date"].dt.date == selected_date]
 if filtered.empty:
     st.warning(f"No data available for {selected_date}. Try another date.")
 else:
-    st.subheader(f"📅 Data for {selected_date}")
+    st.subheader(f"Data for {selected_date}")
     st.dataframe(filtered, use_container_width=True)
 
 
