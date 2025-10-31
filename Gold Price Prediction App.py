@@ -212,4 +212,3 @@ if st.button("Predict for selected date"):
     except Exception as e:
         friendly_error_box(e)
 
-st.caption("Fixes: (1) Drops 'Date' from features, (2) Enforces training feature order during prediction, (3) Casts features to float to avoid Timestamp errors.")
