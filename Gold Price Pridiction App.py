@@ -8,7 +8,7 @@ from datetime import timedelta, datetime
 
 st.set_page_config(page_title="Gold Price Predictor", layout="wide")
 st.title("🪙 Gold Price Predictor")
-st.caption("Data source is locked to **gold_price_predictions_final.csv** — no other files allowed.")
+
 
 CSV_PATH = "gold_price_predictions_final.csv"  # Local path (same folder as app.py)
 
