@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from datetime import timedelta
 
-st.set_page_config(page_title="Gold Price Predictor (Fixed CSV)", layout="wide")
+st.set_page_config(page_title="Gold Price Predictor", layout="wide")
 st.title("🪙 Gold Price Predictor (Fixed CSV only)")
 st.caption("Data source is locked to **gold_price_predictions_final.csv** — no other files allowed.")
 
