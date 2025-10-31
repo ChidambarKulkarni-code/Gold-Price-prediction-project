@@ -171,7 +171,7 @@ except Exception as e:
         st.exception(e)
     st.stop()
 
-st.success(f"Loaded {len(raw_df):,} rows from the fixed CSV.")
+st.success(f"Loaded {len(raw_df):,} rows from the CSV.")
 with st.expander("Peek at data (tail)"):
     st.dataframe(raw_df.tail(20), use_container_width=True)
 
@@ -212,4 +212,3 @@ if st.button("Predict for selected date"):
     except Exception as e:
         friendly_error_box(e)
 
-st.caption("Fixes: (1) Drops 'Date' from features, (2) Enforces training feature order during prediction, (3) Casts features to float to avoid Timestamp errors.")
